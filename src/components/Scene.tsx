@@ -3,6 +3,7 @@ import { Canvas } from "react-three-fiber";
 import { Controls } from "./OrbitControls";
 import { Ground } from "./Ground";
 import { Box } from "./Box";
+import { Knight } from "./Knight";
 import { PhysicsProvider } from "./Cannon";
 
 const Scene = () => (
@@ -12,10 +13,7 @@ const Scene = () => (
 
       <axesHelper />
 
-      <Box position={[0, 5, 0]} />
-      <Box position={[0.4, 4, 1]} />
-      <Box position={[-0.4, 6, 0]} />
-      <Box position={[1.1, 6, 2]} />
+      <Knight />
 
       <Controls />
     </PhysicsProvider>

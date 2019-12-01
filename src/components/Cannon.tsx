@@ -1,4 +1,5 @@
 import * as CANNON from "cannon";
+import * as THREE from "three";
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { useRender } from "react-three-fiber";
 
@@ -29,24 +30,34 @@ function useCannon({ ...props }, fn, deps = []) {
   const world = useContext(context);
   // Instanciate a physics body
   const [body] = useState(() => new CANNON.Body(props));
+
   useEffect(() => {
     // Call function so the user can add shapes
     fn(body);
     // Add body to world on mount
     world.addBody(body);
     // Remove body on unmount
-    return () => world.removeBody(body);
+    return () => world.remove(body);
   }, deps);
 
   useRender(() => {
     if (ref.current) {
       // Transport cannon physics into the referenced threejs object
-      ref.current.position.copy(body.position);
-      ref.current.quaternion.copy(body.quaternion);
+      ref.current.position.set(
+        body.position.x,
+        body.position.y,
+        body.position.z
+      );
+      ref.current.quaternion.set(
+        body.quaternion.x,
+        body.quaternion.y,
+        body.quaternion.z,
+        body.quaternion.w
+      );
     }
   }, false);
 
-  return ref;
+  return [ref, body] as const;
 }
 
 export { PhysicsProvider, useCannon };
